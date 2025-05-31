@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulir Pendaftaran Mahasiswa Baru</title>
+</head>
+<body style="background-color: #a5c2db; margin: 20px;">
+
+  <!-- Gambar logo kampus di atas formulir -->
+  <img src="logo.png" alt="Logo Kampus" width="100">
+
+  <!-- Judul halaman utama -->
+  <h1>Formulir Pendaftaran Mahasiswa Baru</h1>
+
+  <!-- Formulir dimulai -->
+  <form action="/submit" method="post">
+
+    <!-- Data pribadi mahasiswa -->
+    <fieldset>
+      <legend>Data Pribadi</legend>
+
+      <!-- Input nama lengkap -->
+      <label for="nama">Nama Lengkap:</label><br>
+      <input type="text" id="nama" name="nama" placeholder="Contoh: Sarah Triana" required><br><br>
+
+      <!-- Input email -->
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email" placeholder="sarah@gmail.com" required><br><br>
+
+      <!-- Pilihan jenis kelamin -->
+      <label>Jenis Kelamin:</label><br>
+      <input type="radio" id="pria" name="jenis_kelamin" value="Pria" required>
+      <label for="pria">Pria</label><br>
+      <input type="radio" id="wanita" name="jenis_kelamin" value="Wanita">
+      <label for="wanita">Wanita</label><br><br>
+    </fieldset>
+
+    <!-- Checkbox pilihan hobi -->
+    <fieldset>
+      <legend>Hobi</legend>
+      <label><input type="checkbox" name="hobi" value="Menonton"> Menonton</label><br>
+      <label><input type="checkbox" name="hobi" value="Olahraga"> Olahraga</label><br>
+      <label><input type="checkbox" name="hobi" value="Musik"> Musik</label><br><br>
+    </fieldset>
+
+    <!-- Dropdown pilihan jurusan -->
+    <fieldset>
+      <legend>Pilihan Jurusan</legend>
+      <label for="jurusan">Pilih Jurusan:</label><br>
+      <select id="jurusan" name="jurusan" required>
+        <option value="">-- Pilih Jurusan --</option>
+        <option value="Teknik Informatika">Teknik Informatika</option>
+        <option value="Teknik Elektro">Teknik Elektro</option>
+        <option value="Sistem Informasi">Sistem Informasi</option>
+        <option value="Bisnis Digital">Bisnis Digital</option>
+      </select><br><br>
+    </fieldset>
+
+    <!-- Textarea untuk alamat lengkap -->
+    <fieldset>
+      <legend>Alamat Lengkap</legend>
+      <label for="alamat">Alamat:</label><br>
+      <textarea id="alamat" name="alamat" rows="4" cols="40" 
+       placeholder="Tulis alamat lengkap Anda di sini..."></textarea><br><br>
+    </fieldset>
+
+    <!-- Tombol untuk mengirim formulir -->
+    <input type="submit" value="Kirim Formulir">
+
+  </form>
+
+  <!-- Tautan ke halaman kampus -->
+  <p><a href="https://www.stitek.ac.id" target="_blank">Kunjungi Situs Resmi STITEK Bontang</a></p>
+
+</body>
+</html>
