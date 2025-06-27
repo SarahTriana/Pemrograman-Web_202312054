@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toko Elektronik Cepat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styletugas4.css" />
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="bi bi-lightning-fill me-2"></i>Toko Elektronik Cepat</a>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <header class="text-center mb-4">
+      <h1>Toko Elektronik Cepat</h1>
+      <p id="waktu"></p>
+    </header>
+
+    <div class="row">
+      <!-- Display Produk Utama -->
+      <div class="col-md-6 mb-4" id="produk-utama">
+        <div class="card">
+          <img id="gambar-produk" src="" class="card-img-top" alt="Gambar Produk">
+          <div class="card-body">
+            <h5 id="nama-produk" class="card-title"></h5>
+            <p id="harga-produk" class="card-text"></p>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-outline-primary" onclick="gantiGambar(-1)">Previous</button>
+              <button class="btn btn-outline-primary" onclick="gantiGambar(1)">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daftar Produk -->
+      <div class="col-md-6 mb-4">
+        <ul class="list-group" id="daftar-produk"></ul>
+      </div>
+    </div>
+
+    <hr class="my-5">
+
+    <h4>Form Pemesanan</h4>
+    <form id="form-pesan">
+      <div class="mb-3">
+        <label for="nama" class="form-label">Nama Pemesan</label>
+        <input type="text" id="nama" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="wa" class="form-label">Nomor WhatsApp</label>
+        <input type="text" id="wa" class="form-control" required placeholder="Contoh: 081234567890"/>
+      </div>
+      <div class="mb-3">
+        <label for="produk" class="form-label">Produk</label>
+        <select id="produk" class="form-select"></select>
+      </div>
+      <div class="mb-3">
+        <label for="jumlah" class="form-label">Jumlah Pesan</label>
+        <input type="number" id="jumlah" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="promo" class="form-label">Kode Promo (Opsional)</label>
+        <input type="text" id="promo" class="form-control" placeholder="Misal: DISKON10"/>
+      </div>
+      <button type="button" class="btn btn-success" onclick="pesanSekarang()">
+        <i class="bi bi-cart-check me-1"></i>Pesan Sekarang
+      </button>
+
+      <div id="preview" class="alert alert-secondary mt-3" style="display:none;"></div>
+    </form>
+
+    <div id="output" class="mt-4 alert alert-info" style="display:none;"></div>
+  </div>
+
+  <footer class="text-center mt-4 mb-2">
+    <p>&copy; 2025 Toko Elektronik Cepat. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const produk = [
+      {
+        nama: "Laptop",
+        harga: 9500000,
+        gambar: [
+          "https://m.media-amazon.com/images/I/71YpUx0XFdL._AC_SL1500_.jpg",
+          "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6291/6291888ld.jpg"
+        ]
+      },
+      {
+        nama: "Smartphone ",
+        harga: 5750000,
+        gambar: [
+          "https://image.oppo.com/content/dam/oppo/common/mkt/v2-2/oppo-a60/product-image/860-720-specs.png",
+          "https://tse2.mm.bing.net/th?id=OIP.b7CFOCJICHxZ5K1ofd4R2QHaE8&pid=Api&P=0&h=180"
+        ]
+      },
+      {
+        nama: "Smart TV",
+        harga: 9200000,
+        gambar: [
+          "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6541/6541863ld.jpg",
+          "https://m.media-amazon.com/images/I/71LJJrKbezL.jpg"
+        ]
+      }
+    ];
+
+    let indeksProdukAktif = 0;
+    let indeksGambarAktif = 0;
+
+    function tampilkanProdukUtama() {
+      const p = produk[indeksProdukAktif];
+      const gambar = p.gambar[indeksGambarAktif];
+
+      document.getElementById("gambar-produk").src = gambar;
+      document.getElementById("gambar-produk").alt = p.nama;
+      document.getElementById("nama-produk").textContent = p.nama;
+      document.getElementById("harga-produk").textContent = "Harga: Rp " + p.harga.toLocaleString();
+
+      const select = document.getElementById("produk");
+      select.innerHTML = "";
+      produk.forEach((item, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = item.nama;
+        if (index === indeksProdukAktif) option.selected = true;
+        select.appendChild(option);
+      });
+    }
+
+    function tampilkanDaftarProduk() {
+      const daftar = document.getElementById("daftar-produk");
+      daftar.innerHTML = "";
+
+      produk.forEach((p, i) => {
+        const item = document.createElement("li");
+        item.className = "list-group-item list-group-item-action";
+        item.style.cursor = "pointer";
+        item.textContent = p.nama;
+        item.onclick = () => {
+          indeksProdukAktif = i;
+          indeksGambarAktif = 0;
+          tampilkanProdukUtama();
+        };
+        daftar.appendChild(item);
+      });
+    }
+
+    function gantiGambar(arah) {
+      const p = produk[indeksProdukAktif];
+      indeksGambarAktif += arah;
+
+      if (indeksGambarAktif < 0) {
+        indeksGambarAktif = p.gambar.length - 1;
+      } else if (indeksGambarAktif >= p.gambar.length) {
+        indeksGambarAktif = 0;
+      }
+
+      tampilkanProdukUtama();
+    }
+
+    function previewTotal() {
+      const jumlah = parseInt(document.getElementById("jumlah").value);
+      const promo = document.getElementById("promo").value.trim().toUpperCase();
+      const indexProduk = parseInt(document.getElementById("produk").value);
+      const previewBox = document.getElementById("preview");
+
+      if (isNaN(jumlah) || jumlah <= 0 || isNaN(indexProduk)) {
+        previewBox.style.display = "none";
+        return;
+      }
+
+      const p = produk[indexProduk];
+      const subtotal = p.harga * jumlah;
+      const potongan = promo === "DISKON10" ? 0.1 * subtotal : 0;
+      const total = subtotal - potongan;
+
+      previewBox.style.display = "block";
+      previewBox.textContent =
+        `Preview Total:\n` +
+        `Produk: ${p.nama}\n` +
+        `Jumlah: ${jumlah}\n` +
+        `Subtotal: Rp ${subtotal.toLocaleString()}\n` +
+        `Potongan: Rp ${potongan.toLocaleString()}\n` +
+        `Total: Rp ${total.toLocaleString()}`;
+    }
+
+    function pesanSekarang() {
+      const nama = document.getElementById("nama").value.trim();
+      const wa = document.getElementById("wa").value.trim();
+      const jumlah = parseInt(document.getElementById("jumlah").value);
+      const promo = document.getElementById("promo").value.trim().toUpperCase();
+      const indexProduk = parseInt(document.getElementById("produk").value);
+
+      if (nama === "" || !/^[a-zA-Z\s]+$/.test(nama)) {
+        alert("Nama harus diisi dengan huruf dan tidak boleh kosong.");
+        return;
+      }
+
+      if (!/^[0-9]{10,15}$/.test(wa)) {
+        alert("Nomor WhatsApp harus berupa angka dan minimal 10 digit.");
+        return;
+      }
+
+      if (isNaN(jumlah) || jumlah <= 0) {
+        alert("Jumlah harus diisi dengan angka dan lebih dari 0.");
+        return;
+      }
+
+      const p = produk[indexProduk];
+      const subtotal = p.harga * jumlah;
+      const potongan = promo === "DISKON10" ? 0.1 * subtotal : 0;
+      const total = subtotal - potongan;
+      const orderID = "INV-" + Math.floor(Math.random() * 90000 + 10000);
+
+      const output = document.getElementById("output");
+      output.style.display = "block";
+      output.className = "alert alert-success mt-4";
+      output.textContent =
+        `✅ PESANAN BERHASIL!\n\n` +
+        `Order ID: ${orderID}\n` +
+        `Nama: ${nama}\n` +
+        `No. WhatsApp: ${wa}\n` +
+        `Produk: ${p.nama}\n` +
+        `Jumlah: ${jumlah}\n` +
+        `Subtotal: Rp ${subtotal.toLocaleString()}\n` +
+        `Potongan: Rp ${potongan.toLocaleString()}\n` +
+        `Total Akhir: Rp ${total.toLocaleString()}`;
+
+      document.getElementById("form-pesan").reset();
+      document.getElementById("preview").style.display = "none";
+    }
+
+    function updateWaktu() {
+      document.getElementById("waktu").textContent = new Date().toLocaleString("id-ID");
+    }
+    tampilkanProdukUtama();
+    tampilkanDaftarProduk();
+    updateWaktu();
+    setInterval(updateWaktu, 1000);
+
+    document.getElementById("jumlah").addEventListener("input", previewTotal);
+    document.getElementById("produk").addEventListener("change", previewTotal);
+    document.getElementById("promo").addEventListener("input", previewTotal);
+  </script>
+</body>
+</html>
